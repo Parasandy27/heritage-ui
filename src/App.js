@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect, useRef } from "react";
+import Sidebar from "./components/Sidebar";
+import ChatBox from "./components/ChatBox";
+import InputArea from "./components/InputArea";
+import Navbar from "./components/Navbar";
+import "./App.css";
 
 function App() {
+  const [messages, setMessages] = useState([]);
+  const chatEndRef = useRef(null);
+
+  useEffect(() => {
+    setMessages([
+      { text: "Hello 👋 How can I help you?", sender: "bot" }
+    ]);
+  }, []);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Navbar />
+
+      <div className="body">
+        <Sidebar />
+
+        <div className="chat-container">
+          <ChatBox messages={messages} chatEndRef={chatEndRef} />
+          <InputArea setMessages={setMessages} />
+        </div>
+      </div>
     </div>
   );
 }
