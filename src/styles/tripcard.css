@@ -43,3 +43,26 @@
   color: #cbd5f5;
   line-height: 1.5;
 }
+.trip-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.trip-card {
+  background: #1e293b;
+  padding: 15px;
+  border-radius: 12px;
+  border-left: 4px solid #6366f1;
+  margin-top: 10px;
+}
+
+.trip-card h3 {
+  color: #facc15;
+  margin-bottom: 10px;
+}
+
+.trip-card li {
+  color: #e2e8f0;
+  margin-bottom: 5px;
+}

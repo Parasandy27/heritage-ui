@@ -34,7 +34,7 @@ const res = await fetch("https://endurance-delta-viscous.ngrok-free.dev/chat", {
 
       setMessages((prev) => [
         ...prev,
-        { text: data.reply, sender: "bot" }
+        { text: data, sender: "bot", isTrip: true }
       ]);
 
     } catch {
