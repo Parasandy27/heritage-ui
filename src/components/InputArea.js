@@ -19,14 +19,15 @@ function InputArea({ setMessages }) {
     ]);
 
     try {
-      const res = await fetch("https://endurance-delta-viscous.ngrok-free.dev/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ message: currentInput })
-      });
-
+const res = await fetch("https://endurance-delta-viscous.ngrok-free.dev/chat", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    message: currentInput
+  })
+});
       const data = await res.json();
 
       setMessages((prev) => prev.filter((m) => !m.typing));
