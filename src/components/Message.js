@@ -1,42 +1,45 @@
 import React from "react";
 
+
 function Message({ msg }) {
   return (
     <div className={`message ${msg.sender}`}>
       <div className="bubble">
 
-        {/* Trip UI */}
+        {/* ✅ TRIP UI */}
         {msg.isTrip && msg.text?.days ? (
           <div className="trip-container">
 
-            {/* 📅 DAYS */}
-            {msg.text.days.map((day, i) => (
-              <div key={i} className="trip-card">
-                <h3>Day {day.day} - {day.title}</h3>
-                <ul>
-                  {day.activities.map((act, j) => (
-                    <li key={j}>{act}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-
-            {/* 🚗 TRAVEL */}
+            {/* Travel Mode */}
             {msg.text.travel_mode && (
-              <div className="travel-card">
-                <h3>🚗 Travel</h3>
-                <p>{msg.text.travel_mode}</p>
+              <div className="travel-mode">
+                🚆 {msg.text.travel_mode}
               </div>
             )}
 
-            {/* 💰 BUDGET */}
+            {/* Days */}
+            {msg.text.days.map((day, i) => (
+              <div key={i} className="trip-card">
+                <h3>Day {i + 1}</h3>
+
+                {day.activities?.map((act, j) => (
+                  <div key={j} className="activity">
+                    <p>📍 {act.place}</p>
+                    <p>⏰ {act.time}</p>
+                    <p>✨ {act.description}</p>
+                  </div>
+                ))}
+              </div>
+            ))}
+
+            {/* ✅ Budget ONLY if exists */}
             {msg.text.budget && (
               <div className="budget-card">
-                <h3>💰 Budget</h3>
+                <h4>💰 Budget</h4>
                 <p>Stay: {msg.text.budget.stay}</p>
                 <p>Food: {msg.text.budget.food}</p>
                 <p>Travel: {msg.text.budget.travel}</p>
-                <p><b>Total: {msg.text.budget.total}</b></p>
+                <p>Total: {msg.text.budget.total}</p>
               </div>
             )}
 
