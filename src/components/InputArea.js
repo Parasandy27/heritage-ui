@@ -3,46 +3,77 @@ import "../styles/input.css";
 
 function InputArea({ setMessages }) {
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
+    if (!input.trim() || loading) return;
 
     const userMsg = { text: input, sender: "user" };
+
+    // show user message
     setMessages((prev) => [...prev, userMsg]);
 
     const currentInput = input;
     setInput("");
+    setLoading(true);
 
+    // show typing
     setMessages((prev) => [
       ...prev,
       { text: "Typing...", sender: "bot", typing: true }
     ]);
 
     try {
-const res = await fetch("https://endurance-delta-viscous.ngrok-free.dev/chat", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    message: currentInput
-  })
-});
+      const res = await fetch(
+        "https://endurance-delta-viscous.ngrok-free.dev/chat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: currentInput
+          })
+        }
+      );
+
       const data = await res.json();
 
-      setMessages((prev) => prev.filter((m) => !m.typing));
+      setMessages((prev) => {
+        // remove typing
+        const filtered = prev.filter((m) => !m.typing);
 
-      setMessages((prev) => [
-        ...prev,
-        { text: data, sender: "bot", isTrip: true }
-      ]);
+        // trip response
+        if (data.days) {
+          return [
+            ...filtered,
+            { text: data, sender: "bot", isTrip: true }
+          ];
+        }
 
-    } catch {
-      setMessages((prev) => [
-        ...prev,
-        { text: "Error connecting to backend", sender: "bot" }
-      ]);
+        // normal response
+        return [
+          ...filtered,
+          {
+            text: data.reply || "No response",
+            sender: "bot"
+          }
+        ];
+      });
+
+    } catch (error) {
+      console.error(error);
+
+      setMessages((prev) => {
+        const filtered = prev.filter((m) => !m.typing);
+        return [
+          ...filtered,
+          { text: "Error connecting to backend", sender: "bot" }
+        ];
+      });
     }
+
+    setLoading(false);
   };
 
   return (
@@ -51,9 +82,13 @@ const res = await fetch("https://endurance-delta-viscous.ngrok-free.dev/chat", {
         value={input}
         onChange={(e) => setInput(e.target.value)}
         placeholder="Ask about places..."
+        disabled={loading}
         onKeyDown={(e) => e.key === "Enter" && sendMessage()}
       />
-      <button onClick={sendMessage}>➤</button>
+
+      <button onClick={sendMessage} disabled={loading}>
+        {loading ? "..." : "➤"}
+      </button>
     </div>
   );
 }

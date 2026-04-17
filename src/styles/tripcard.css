@@ -43,11 +43,6 @@
   color: #cbd5f5;
   line-height: 1.5;
 }
-.trip-container {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
 
 .trip-card {
   background: #1e293b;
