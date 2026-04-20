@@ -1,4 +1,19 @@
-.msg {
+/* MESSAGE CONTAINER */
+.message {
+  display: flex;
+  margin: 10px 0;
+}
+
+.message.user {
+  justify-content: flex-end;
+}
+
+.message.bot {
+  justify-content: flex-start;
+}
+
+/* BUBBLE */
+.bubble {
   width: 50%;
   padding: 14px 16px;
   border-radius: 14px;
@@ -6,14 +21,14 @@
 }
 
 /* USER */
-.msg.user {
-   background: #7c3aed;
+.message.user .bubble {
+  background: #7c3aed;
   color: #ffffff;
   margin-left: auto;
 }
 
 /* BOT */
-.msg.bot {
+.message.bot .bubble {
   background: #1e293b;
   border: 1px solid #334155;
   color: #e2e8f0;

@@ -1,5 +1,5 @@
 import React from "react";
-
+import "../styles/message.css";
 
 function Message({ msg }) {
   return (
@@ -10,36 +10,43 @@ function Message({ msg }) {
         {msg.isTrip && msg.text?.days ? (
           <div className="trip-container">
 
-            {/* Travel Mode */}
+            {/* 🚆 Travel Mode */}
             {msg.text.travel_mode && (
               <div className="travel-mode">
                 🚆 {msg.text.travel_mode}
               </div>
             )}
 
-            {/* Days */}
+            {/* 📅 Days */}
             {msg.text.days.map((day, i) => (
               <div key={i} className="trip-card">
                 <h3>Day {i + 1}</h3>
 
-                {day.activities?.map((act, j) => (
-                  <div key={j} className="activity">
-                    <p>📍 {act.place}</p>
-                    <p>⏰ {act.time}</p>
-                    <p>✨ {act.description}</p>
-                  </div>
-                ))}
+                {/* Activities */}
+                {day.activities?.length ? (
+                  day.activities.map((act, j) => (
+                    <div key={j} className="activity">
+                      <p className="place">📍 {act.place || "N/A"}</p>
+                      <p className="time">⏰ {act.time || "N/A"}</p>
+                      <p className="desc">✨ {act.description || "N/A"}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="no-data">No activities available</p>
+                )}
               </div>
             ))}
 
-            {/* ✅ Budget ONLY if exists */}
+            {/* 💰 Budget */}
             {msg.text.budget && (
               <div className="budget-card">
                 <h4>💰 Budget</h4>
-                <p>Stay: {msg.text.budget.stay}</p>
-                <p>Food: {msg.text.budget.food}</p>
-                <p>Travel: {msg.text.budget.travel}</p>
-                <p>Total: {msg.text.budget.total}</p>
+                <div className="budget-grid">
+                  <p>🍛 Food: {msg.text.budget.food}</p>
+                  <p>🚆 Travel: {msg.text.budget.travel}</p>
+                  <p>🏨 Stay: {msg.text.budget.stay}</p>
+                  <p className="total">💵 Total: {msg.text.budget.total}</p>
+                </div>
               </div>
             )}
 
