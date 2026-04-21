@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import Navbar from "./components/Navbar";
 import "./App.css";
 
 function App() {
@@ -7,6 +8,14 @@ function App() {
     { text: "Hello 👋 How can I help you?", sender: "bot" },
   ]);
   const [loading, setLoading] = useState(false);
+
+  // 🔥 AUTO SCROLL REF
+  const messagesEndRef = useRef(null);
+
+  // 🔥 AUTO SCROLL EFFECT
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -32,7 +41,6 @@ function App() {
 
       console.log("STATUS:", res.status);
 
-      // ❌ If server error
       if (!res.ok) {
         throw new Error("Server not responding");
       }
@@ -60,64 +68,73 @@ function App() {
 
   return (
     <div className="app">
-      {/* SIDEBAR */}
-      <div className="sidebar">
-        <h1>TRAVELMATE AI</h1>
-        <p>Explore Culture IN</p>
-      </div>
+      {/* 🔥 NAVBAR */}
+      <Navbar />
 
-      {/* CHAT */}
-      <div className="chat">
-        {/* MESSAGES */}
-        <div className="messages">
-          {messages.map((msg, i) => (
-            <div key={i} className={`message-row ${msg.sender}`}>
-              <div className={`message ${msg.sender}`}>
-                {/* 🔥 TRIP UI */}
-                {msg.text?.days ? (
-                  <div className="trip-wrapper">
-                    {msg.text.days.map((day, index) => (
-                      <div key={index} className="premium-day-card">
-                        <div className="accent-line"></div>
-
-                        <div className="day-content">
-                          <h2>Day {day.day}</h2>
-                          <p>{day.content}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div style={{ whiteSpace: "pre-line" }}>{msg.text}</div>
-                )}
-              </div>
-            </div>
-          ))}
-
-          {/* 🔥 LOADING */}
-          {loading && (
-            <div className="message-row bot">
-              <div className="message bot typing">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </div>
-          )}
+      {/* 🔥 BODY */}
+      <div className="body">
+        {/* SIDEBAR */}
+        <div className="sidebar">
+          <h1>TRAVELMATE AI</h1>
+          <p>Explore Culture IN</p>
         </div>
 
-        {/* INPUT */}
-        <div className="input-area">
-          <input
-            placeholder="Ask about places..."
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          />
+        {/* CHAT */}
+        <div className="chat">
+          {/* MESSAGES */}
+          <div className="messages">
+            {messages.map((msg, i) => (
+              <div key={i} className={`message-row ${msg.sender}`}>
+                <div className={`message ${msg.sender}`}>
+                  {/* 🔥 TRIP UI */}
+                  {msg.text?.days ? (
+                    <div className="trip-wrapper">
+                      {msg.text.days.map((day, index) => (
+                        <div key={index} className="premium-day-card">
+                          <div className="accent-line"></div>
 
-          <button onClick={sendMessage} disabled={loading}>
-            {loading ? "..." : "➤"}
-          </button>
+                          <div className="day-content">
+                            <h2>Day {day.day}</h2>
+                            <p>{day.content}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div style={{ whiteSpace: "pre-line" }}>{msg.text}</div>
+                  )}
+                </div>
+              </div>
+            ))}
+
+            {/* 🔥 LOADING */}
+            {loading && (
+              <div className="message-row bot">
+                <div className="message bot typing">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            )}
+
+            {/* 🔥 AUTO SCROLL TARGET */}
+            <div ref={messagesEndRef}></div>
+          </div>
+
+          {/* INPUT */}
+          <div className="input-area">
+            <input
+              placeholder="Ask about places..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+            />
+
+            <button onClick={sendMessage} disabled={loading}>
+              {loading ? "..." : "➤"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
