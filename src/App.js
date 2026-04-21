@@ -19,29 +19,36 @@ function App() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        "https://endurance-delta-viscous.ngrok-free.dev/chat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ message: userText }),
         },
-        body: JSON.stringify({ message: userText }),
-      });
+      );
 
-      const data = await res.json();
+      console.log("STATUS:", res.status);
+
+      // ❌ If server error
+      if (!res.ok) {
+        throw new Error("Server not responding");
+      }
+
+      const data = await res.json(); // ✅ ONLY ONCE
+      console.log("DATA:", data);
 
       // 🔥 HANDLE BOTH CASES
       if (data.days) {
-        setMessages((prev) => [
-          ...prev,
-          { text: data, sender: "bot" }, // structured data
-        ]);
+        setMessages((prev) => [...prev, { text: data, sender: "bot" }]);
       } else {
-        setMessages((prev) => [
-          ...prev,
-          { text: data.reply, sender: "bot" }, // normal text
-        ]);
+        setMessages((prev) => [...prev, { text: data.reply, sender: "bot" }]);
       }
-    } catch {
+    } catch (err) {
+      console.error("ERROR:", err);
+
       setMessages((prev) => [
         ...prev,
         { text: "Error connecting to backend", sender: "bot" },
@@ -66,7 +73,7 @@ function App() {
           {messages.map((msg, i) => (
             <div key={i} className={`message-row ${msg.sender}`}>
               <div className={`message ${msg.sender}`}>
-                {/* 🔥 TRIP UI (JSON) */}
+                {/* 🔥 TRIP UI */}
                 {msg.text?.days ? (
                   <div className="trip-wrapper">
                     {msg.text.days.map((day, index) => (
