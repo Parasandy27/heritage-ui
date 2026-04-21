@@ -9,10 +9,9 @@ function App() {
   ]);
   const [loading, setLoading] = useState(false);
 
-  // 🔥 AUTO SCROLL REF
   const messagesEndRef = useRef(null);
 
-  // 🔥 AUTO SCROLL EFFECT
+  // 🔥 AUTO SCROLL
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
@@ -39,14 +38,11 @@ function App() {
         },
       );
 
-      console.log("STATUS:", res.status);
-
       if (!res.ok) {
         throw new Error("Server not responding");
       }
 
-      const data = await res.json(); // ✅ ONLY ONCE
-      console.log("DATA:", data);
+      const data = await res.json();
 
       // 🔥 HANDLE BOTH CASES
       if (data.days) {
@@ -88,18 +84,47 @@ function App() {
                 <div className={`message ${msg.sender}`}>
                   {/* 🔥 TRIP UI */}
                   {msg.text?.days ? (
-                    <div className="trip-wrapper">
-                      {msg.text.days.map((day, index) => (
-                        <div key={index} className="premium-day-card">
-                          <div className="accent-line"></div>
+                    <>
+                      {/* DAY CARDS */}
+                      <div className="trip-wrapper">
+                        {msg.text.days.map((day, index) => (
+                          <div key={index} className="premium-day-card">
+                            <div className="accent-line"></div>
 
-                          <div className="day-content">
-                            <h2>Day {day.day}</h2>
-                            <p>{day.content}</p>
+                            <div className="day-content">
+                              <h2>Day {day.day}</h2>
+                              <p>{day.content}</p>
+                            </div>
                           </div>
+                        ))}
+                      </div>
+
+                      {/* 🔥 BUDGET */}
+                      {msg.text?.budget && (
+                        <div className="budget-wrapper">
+                          {msg.text?.budget && (
+                            <div className="total-budget-box">
+                              {/* 🔥 TOTAL CALCULATION */}
+                              <h2>
+                                Total Trip Budget: ₹
+                                {msg.text.budget.reduce(
+                                  (sum, b) => sum + b.total,
+                                  0,
+                                )}
+                              </h2>
+
+                            </div>
+                          )}
+
+                          {/* 🔥 DISCLAIMER */}
+                          <p className="budget-note">
+                            This is an approximate budget and may vary
+                            depending on location, season, and personal
+                            preferences.This is for only one person.
+                          </p>
                         </div>
-                      ))}
-                    </div>
+                      )}
+                    </>
                   ) : (
                     <div style={{ whiteSpace: "pre-line" }}>{msg.text}</div>
                   )}

@@ -225,9 +225,37 @@
     opacity: 0.2;
   }
 }
+
 .sidebar h1 {
   color: yellow;
 }
+
 .sidebar p {
   color: rgb(248, 248, 192);
+}
+.budget-wrapper {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #bdfa15;
+}
+
+.budget-card {
+  padding: 14px;
+  border-radius: 12px;
+
+  background: rgba(250, 204, 21, 0.08);
+  border: 1px solid #facc15;
+
+  color: #facc15;
+  font-size: 14px;
+}
+
+/* 🔥 DISCLAIMER */
+.budget-note {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #c2f571;
+  text-align: center;
 }
