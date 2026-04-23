@@ -32,7 +32,7 @@ export default function Navbar({ selectedState, view }) {
       {/* NAV MENU */}
       <nav className={`nav-right ${menuOpen ? "active" : ""}`}>
         <a
-          href="#maps"
+          href="https://map.aryaavart.in/"
           className={active === "maps" ? "active" : ""}
           onClick={() => {
             setActive("maps");
@@ -43,7 +43,7 @@ export default function Navbar({ selectedState, view }) {
         </a>
 
         <a
-          href="#chatbot"
+          href="https://heritage-ui-hazel.vercel.app/"
           className={active === "chatbot" ? "active" : ""}
           onClick={() => {
             setActive("chatbot");
@@ -53,12 +53,11 @@ export default function Navbar({ selectedState, view }) {
           TravelMate AI
         </a>
 
-        <a href="#translate" onClick={() => setMenuOpen(false)}>
+        <a
+          href="https://map.aryaavart.in/translation"
+          onClick={() => setMenuOpen(false)}
+        >
           Translation
-        </a>
-
-        <a href="#login" onClick={() => setMenuOpen(false)}>
-          Login
         </a>
       </nav>
     </header>
